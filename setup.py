@@ -9,5 +9,5 @@ setup(
     url='https://github.com/chriscohoat/highrise',
     license='LICENSE.txt',
     description='Pythonic wrapper for Highrise.',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
 )
