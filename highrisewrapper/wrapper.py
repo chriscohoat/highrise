@@ -2,7 +2,7 @@ import base64
 import urllib2
 
 import elementtree.ElementTree as ET
-from classes import Note,Email
+from classes import Note,Email,Attachment
 
 class Highrise(object):
     """
@@ -41,27 +41,55 @@ class Highrise(object):
         returned_xml = self.opener.open(req).read()
         return ET.fromstring(returned_xml)
     
-    def notes(self, person_id, get_attachments=False):
+    def add_attachments(self,object,attachments):
+        if attachments:
+            for attachment in attachments.findall('attachment'):
+                attachment_model = Attachment(attachment_id=attachment.find('id').text,
+                                              url=attachment.find('url').text,
+                                              name=attachment.find('name').text,
+                                              size=attachment.find('size').text)
+                object.attachments.append(attachment_model)
+    
+    def notes(self, person_id, get_attachments=True):
         """
         This will return all notes for the specified person.
         """
         path = '/people/%u/notes' % person_id
         notes = []
         for a_note in self._request(path).findall('note'):
+            
             note = Note(body=a_note.find('body').text,
                         subject_name=a_note.find('subject-name').text,
                         note_id=a_note.find('id').text,
                         author_id=a_note.find('author-id').text,
                         created_at=a_note.find('created-at').text)
+            
             if get_attachments:
-                note.attach_documents()
+                path = '/notes/%s.xml' % note.note_id
+                attachments = self._request(path).find('attachments')
+                self.add_attachments(note,attachments)
+                
             notes.append(note)
+            
         return notes
     
-    def emails(self, person_id):
+    def emails(self, person_id, get_attachments=False):
         """
         This will return all emails for the specified person.
         """
         path = '/people/%u/emails' % person_id
-        return self._request(path).findall('email')
+        emails = []
+        for an_email in self._request(path).findall('email'):
+            
+            email = Email(email_id=an_email.find('author-id').text,
+                          body=an_email.find('body').text,
+                          created_at=an_email.find('created-at').text,
+                          subject=an_email.find('title').text,
+                          )
+            
+            attachments = an_email.find('attachments')
+            self.add_attachments(email,attachments)
+            emails.append(email)
+            
+        return emails
  
