@@ -27,8 +27,28 @@ Usage
 Interacting with notes (in a Django template)
 -----
 
+views.py
+
+	def highrise_interaction(request):
+	
+		#Prepare the Highrise interaction with the API token and person ID
+    	highrise_api_token = 'TOKEN_HERE'
+    	person_highrise_id = 'PERSON_ID_HERE'
+    	hr = Highrise('https://examplecorporation.highrisehq.com',highrise_api_token)
+    
+   		#Get list of notes or list of emails
+   		notes = hr.notes(person_highrise_id)
+   		
+   		return render_to_response('template.html',{'notes':notes}, context_instance=RequestContext(request))
+
+template.html
+
+	{% extends "base.html" %}
+	
+	{% block content %}
+
     {% if not notes %}
-    <h3>No notes available for this candidate.</h3>
+    <h3>No notes available for this person.</h3>
     {% else %}
     {% for note in notes %}
     
@@ -43,6 +63,8 @@ Interacting with notes (in a Django template)
 	
 	{% endfor %}
 	{% endif %}
+	
+	{% endblock %}
 
 Testing
 -------
