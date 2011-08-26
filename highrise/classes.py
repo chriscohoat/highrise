@@ -15,9 +15,6 @@ class Note(object):
         self.author_id = author_id
         self.created_at = created_at
         self.attachments = []
-        
-    def attach_documents(self):
-        pass
 
 class Email(object):
     
