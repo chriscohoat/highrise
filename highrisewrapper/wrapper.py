@@ -2,6 +2,7 @@ import base64
 import urllib2
 
 import elementtree.ElementTree as ET
+import Note,Email
 
 class Highrise(object):
     """
