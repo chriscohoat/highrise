@@ -81,10 +81,12 @@ class Highrise(object):
         emails = []
         for an_email in self._request(path).findall('email'):
             
-            email = Email(email_id=an_email.find('author-id').text,
+            email = Email(email_id=an_email.find('id').text,
+                          author_id=an_email.find('author-id').text,
                           body=an_email.find('body').text,
                           created_at=an_email.find('created-at').text,
-                          subject=an_email.find('title').text,
+                          title=an_email.find('title').text,
+                          subject_name=an_email.find('subject-name').text,
                           )
             
             attachments = an_email.find('attachments')
