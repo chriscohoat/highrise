@@ -2,7 +2,7 @@ import base64
 import urllib2
 
 import elementtree.ElementTree as ET
-import Note,Email
+from classes import Note,Email
 
 class Highrise(object):
     """
@@ -41,12 +41,22 @@ class Highrise(object):
         returned_xml = self.opener.open(req).read()
         return ET.fromstring(returned_xml)
     
-    def notes(self, person_id):
+    def notes(self, person_id, get_attachments=False):
         """
         This will return all notes for the specified person.
         """
         path = '/people/%u/notes' % person_id
-        return self._request(path).findall('note')
+        notes = []
+        for a_note in self._request(path).findall('note'):
+            note = Note(body=a_note.find('body').text,
+                        subject_name=a_note.find('subject-name').text,
+                        note_id=a_note.find('id').text,
+                        author_id=a_note.find('author-id').text,
+                        created_at=a_note.find('created-at').text)
+            if get_attachments:
+                note.attach_documents()
+            notes.append(note)
+        return notes
     
     def emails(self, person_id):
         """
