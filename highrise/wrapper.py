@@ -50,7 +50,7 @@ class Highrise(object):
                                               size=attachment.find('size').text)
                 object.attachments.append(attachment_model)
     
-    def notes(self, person_id, get_attachments=True):
+    def notes(self, person_id, get_attachments=False):
         """
         This will return all notes for the specified person.
         """
