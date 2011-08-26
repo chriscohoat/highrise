@@ -4,7 +4,26 @@ import urllib2
 import elementtree.ElementTree as ET
 
 class Highrise(object):
+    """
+    Provides a Pythonic wrapper for the Highrise API.
     
+    Usage:
+    
+        # Import ElementTree and the Basecamp wrapper module.
+        import elementtree.ElementTree as ET
+        from highrisewrapper.wrapper import Highrise
+    
+        # Prepare the interaction with Basecamp.
+        hr = Highrise('http://yourBasecamp.projectpath.com/', HIGHRISE_API_TOKEN)
+    
+        # Get the notes for a person
+        notes = hr.notes(personID)
+    
+        # View the body of each note
+        for note in hr.notes(personID):
+            print note.find('body').text
+    
+    """
     def __init__(self, baseURL, api_token):
         self.baseURL = baseURL
         if self.baseURL[-1] == '/':
