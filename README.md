@@ -24,7 +24,7 @@ Usage
     notes = hr.notes(person_highrise_id)
     emails = hr.emails(person_highrise_id)
     
-Interacting with notes (in a Django template)
+Interacting with notes (using Django)
 -----
 
 views.py
