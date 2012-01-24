@@ -38,7 +38,11 @@ class Highrise(object):
             data = ET.tostring(data)
         url=self.baseURL + path
         req = urllib2.Request(url=url, data=data)
-        returned_xml = self.opener.open(req,timeout=5).read()
+        returned_xml = ""
+        try:
+            returned_xml = self.opener.open(req,timeout=5).read()
+        except:
+            pass
         return ET.fromstring(returned_xml)
     
     def add_attachments(self,object,attachments):
@@ -73,7 +77,7 @@ class Highrise(object):
             
         return notes
     
-    def emails(self, person_id, get_attachments=False):
+    def emails(self, person_id):
         """
         This will return all emails for the specified person.
         """
